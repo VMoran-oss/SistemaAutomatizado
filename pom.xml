@@ -31,12 +31,21 @@
 	</properties>
 	<dependencies>
 		<!--DEPENDENCIAS ADICIONALES-->
+
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>3.1.1</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.2.6</version>
+			<scope>compile</scope>
+		</dependency>
+
 		<!--FIN DE DEPENCIAS ADICIONALES-->
 
 		<!--DEPENDENCIAS AGREGADAS EN LA CREACIÓN DEL PROYECTO-->

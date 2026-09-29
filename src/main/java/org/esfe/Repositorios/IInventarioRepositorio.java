@@ -1,4 +1,6 @@
 package org.esfe.Repositorios;
 
-public interface IInventarioRepositorio {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface IInventarioRepositorio extends JpaRepository<Inventario ,Integer> {
 }
