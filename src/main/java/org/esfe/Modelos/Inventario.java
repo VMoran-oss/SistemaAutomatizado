@@ -13,6 +13,5 @@ public class Inventario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer IdInventario;
-    private Integer IdProducto;
     private Integer Cantidad;
 }

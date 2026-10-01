@@ -19,4 +19,6 @@ public interface IInventarioServicio {
     InventarioSalida crear(InventarioGuardar inventarioGuardar);
 
     InventarioSalida modificar(InventarioModificar inventarioModificar);
+
+    void eliminarPorId(Integer IdInventario);
 }
