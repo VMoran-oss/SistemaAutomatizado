@@ -54,9 +54,9 @@ public class InventarioControlador {
         InventarioSalida Inventario = inventarioServicio.modificar(inventarioModificar);
         return ResponseEntity.ok(Inventario);
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{IdInventario}")
         public ResponseEntity eliminar(@PathVariable Integer IdInventario){
         inventarioServicio.eliminarPorId(IdInventario);
-        return ResponseEntity.ok("Inventario Eliminado correctamente");
+        return ResponseEntity.ok("Registro Eliminado correctamente");
         }
 }
