@@ -1,24 +1,17 @@
-package org.esfe.Modelos;
+package org.esfe.dtos.Producto;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "Productos")
-public class Producto {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductoSalida implements Serializable {
     private Integer idProducto;
-
     private String nombre;
     private String descripcion;
     private BigDecimal precio;
     private Integer stock;
 }
-

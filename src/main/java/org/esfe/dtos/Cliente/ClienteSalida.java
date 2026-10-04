@@ -1,16 +1,13 @@
-package org.esfe.Modelos;
+package org.esfe.dtos.Cliente;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-@Entity
-@Table(name = "Clientes")
-public class Cliente {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ClienteSalida implements Serializable {
     private Integer IdCliente;
     private String Nombre;
     private Integer Telefono;
