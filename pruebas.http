@@ -1,0 +1,41 @@
+### 1. Ver todas las ventas
+GET http://localhost:8080/api/Ventas/lista
+
+### 2. Ver una venta por id
+GET http://localhost:8080/api/Ventas/1
+
+### 3. Crear una venta
+POST http://localhost:8080/api/Ventas
+Content-Type: application/json
+
+{
+  "total": 40.00,
+  "cliente": "Ana Gomez",
+  "usuario": "admin"
+}
+
+### 4. Modificar la venta 1
+PUT http://localhost:8080/api/Ventas/1
+Content-Type: application/json
+
+{
+  "total": 30.00,
+  "cliente": "Juan Perez",
+  "usuario": "admin"
+}
+
+### 5. Eliminar la venta 2
+DELETE http://localhost:8080/api/Ventas/2
+
+### 6. Crear una factura
+POST http://localhost:8080/api/Facturas
+Content-Type: application/json
+
+{
+  "numeroFactura": 1001,
+  "total": 30.00,
+  "idDetalleVenta": 1
+}
+
+### 7. Ver todas las facturas
+GET http://localhost:8080/api/Facturas/lista
