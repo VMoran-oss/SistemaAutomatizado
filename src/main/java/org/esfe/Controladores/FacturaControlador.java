@@ -4,6 +4,8 @@ import org.esfe.Servicios.Interfaces.IFacturaServicio;
 import org.esfe.dtos.Factura.FacturaGuardar;
 import org.esfe.dtos.Factura.FacturaModificar;
 import org.esfe.dtos.Factura.FacturaSalida;
+import org.esfe.dtos.Inventario.InventarioGuardar;
+import org.esfe.dtos.Inventario.InventarioSalida;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +57,12 @@ public class FacturaControlador {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+   public ResponseEntity<FacturaSalida> crear(@RequestBody FacturaGuardar facturaGuardar){
+        FacturaSalida factura = facturaServicio.crear(facturaGuardar);
+        return ResponseEntity.ok(factura);
     }
 
     @PutMapping("/{IdFactura}")
