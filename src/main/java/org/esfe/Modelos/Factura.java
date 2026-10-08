@@ -17,6 +17,7 @@ public class Factura {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer IdFactura;
 
+    @Column(unique = true, nullable = false)
     private String NumeroFactura;
 
     private LocalDate Fecha;
@@ -32,6 +33,4 @@ public class Factura {
     private String Estado;
 
     private Integer Descuento;
-
-    private Integer IdVenta;
 }

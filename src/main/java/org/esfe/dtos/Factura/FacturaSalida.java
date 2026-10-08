@@ -29,5 +29,4 @@ public class FacturaSalida implements Serializable {
 
     private Integer Descuento;
 
-    private Integer IdVenta;
 }
