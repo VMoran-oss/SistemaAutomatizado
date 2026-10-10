@@ -8,18 +8,17 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-    public interface IVentaServicio {
+public interface IVentaServicio {
 
-        List<VentaSalida> obtenerTodos();
+    List<VentaSalida> obtenerTodos();
 
-        Page<VentaSalida> obtenerTodosPaginados(Pageable pageable);
+    Page<VentaSalida> obtenerTodosPaginados(Pageable pageable);
 
-        VentaSalida obtenerPorId(Integer idVenta);
+    VentaSalida obtenerPorId(Integer idVenta);
 
-        VentaSalida crear(VentaGuardar ventaGuardar);
+    VentaSalida crear(VentaGuardar ventaGuardar);
 
-        VentaSalida modificar(VentaModificar ventaModificar);
+    VentaSalida modificar(VentaModificar ventaModificar);
 
-        void eliminarPorId(Integer idVenta);
-    }
-
+    void eliminarPorId(Integer idVenta);
+}

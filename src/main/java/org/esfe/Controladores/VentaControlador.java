@@ -20,46 +20,42 @@ public class VentaControlador {
     private IVentaServicio ventaServicio;
 
     @GetMapping
-    public ResponseEntity<Page<VentaSalida>> mostrarTodosPaginados(Pageable pageable){
+    public ResponseEntity<Page<VentaSalida>> mostrarTodosPaginados(Pageable pageable) {
         Page<VentaSalida> ventas = ventaServicio.obtenerTodosPaginados(pageable);
-        if(ventas.hasContent()){
+        if (ventas.hasContent()) {
             return ResponseEntity.ok(ventas);
         }
         return ResponseEntity.notFound().build();
     }
+
     @GetMapping("/lista")
     public ResponseEntity<List<VentaSalida>> mostrarTodos() {
         List<VentaSalida> ventas = ventaServicio.obtenerTodos();
-        if(!ventas.isEmpty()) {
+        if (!ventas.isEmpty()) {
             return ResponseEntity.ok(ventas);
         }
         return ResponseEntity.notFound().build();
     }
-    @GetMapping("/{IdVenta}")
-    public ResponseEntity<VentaSalida> buscarPorId(@PathVariable Integer IdVenta){
-        VentaSalida Venta = ventaServicio.obtenerPorId(IdVenta);
-        if(Venta != null){
-            return ResponseEntity.ok(Venta);
-        }
-        return ResponseEntity.notFound().build();
+
+    @GetMapping("/{idVenta}")
+    public ResponseEntity<VentaSalida> buscarPorId(@PathVariable Integer idVenta) {
+        return ResponseEntity.ok(ventaServicio.obtenerPorId(idVenta));
     }
+
     @PostMapping
-    public ResponseEntity<VentaSalida> crear(@RequestBody VentaGuardar ventaGuardar){
-        VentaSalida Venta = ventaServicio.crear(ventaGuardar);
-        return ResponseEntity.ok(Venta);
+    public ResponseEntity<VentaSalida> crear(@RequestBody VentaGuardar ventaGuardar) {
+        return ResponseEntity.ok(ventaServicio.crear(ventaGuardar));
     }
-    @PutMapping("/{IdVenta}")
-    public ResponseEntity<VentaSalida> modificar(@PathVariable Integer IdVenta, @RequestBody VentaModificar ventaModificar) {
-        ventaModificar.setIdVenta(IdVenta);
-        VentaSalida Venta = ventaServicio.modificar(ventaModificar);
-        if(Venta != null){
-            return ResponseEntity.ok(Venta);
-        }
-        return ResponseEntity.notFound().build();
+
+    @PutMapping("/{idVenta}")
+    public ResponseEntity<VentaSalida> modificar(@PathVariable Integer idVenta, @RequestBody VentaModificar ventaModificar) {
+        ventaModificar.setIdVenta(idVenta);
+        return ResponseEntity.ok(ventaServicio.modificar(ventaModificar));
     }
-    @DeleteMapping("/{IdVenta}")
-    public ResponseEntity<String> eliminar(@PathVariable Integer IdVenta){
-        ventaServicio.eliminarPorId(IdVenta);
-        return ResponseEntity.ok("Venta Eliminada correctamente");
+
+    @DeleteMapping("/{idVenta}")
+    public ResponseEntity<String> eliminar(@PathVariable Integer idVenta) {
+        ventaServicio.eliminarPorId(idVenta);
+        return ResponseEntity.ok("Venta eliminada correctamente");
     }
 }
