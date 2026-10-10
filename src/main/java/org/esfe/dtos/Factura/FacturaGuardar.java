@@ -26,4 +26,6 @@ public class FacturaGuardar implements Serializable {
     private String Estado;
 
     private Integer Descuento;
+
+    private Integer idVenta;
 }

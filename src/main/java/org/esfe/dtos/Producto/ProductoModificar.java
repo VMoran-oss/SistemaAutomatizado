@@ -14,4 +14,5 @@ public class ProductoModificar implements Serializable {
     private String descripcion;
     private BigDecimal precio;
     private Integer stock;
+
 }

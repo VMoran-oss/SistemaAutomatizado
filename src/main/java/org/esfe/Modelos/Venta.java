@@ -1,5 +1,6 @@
 package org.esfe.Modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +26,14 @@ public class Venta {
     void antesDeGuardar() {
         if (fecha == null) fecha = LocalDate.now();
     }
+
+    @ManyToOne
+    @JoinColumn(name = "idUsuario")
+    private Usuario Usuario;
+
+    @OneToOne(mappedBy = "Venta")
+    @JsonIgnore
+    private Factura factura;
+
+
 }

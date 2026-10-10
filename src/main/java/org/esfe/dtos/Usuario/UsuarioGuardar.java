@@ -11,5 +11,6 @@ public class UsuarioGuardar implements Serializable {
     private String nombre;
     private String correo;
     private String contrasena;
+
     private Integer idRol;
 }

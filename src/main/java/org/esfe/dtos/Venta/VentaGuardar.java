@@ -14,4 +14,6 @@ public class VentaGuardar implements Serializable {
     private BigDecimal total;
     private String cliente;
     private String usuario;
+
+    private Integer idUsuario;
 }

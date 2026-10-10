@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -14,4 +16,8 @@ public class Inventario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer IdInventario;
     private Integer Cantidad;
+
+    @ManyToOne
+    @JoinColumn(name = "idProducto")
+    private Producto Producto;
 }

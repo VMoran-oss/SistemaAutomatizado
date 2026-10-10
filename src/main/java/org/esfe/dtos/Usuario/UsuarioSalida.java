@@ -12,5 +12,5 @@ public class UsuarioSalida implements Serializable {
     private Integer idUsuario;
     private String nombre;
     private String correo;
-    private RolSalida rol;
+    private RolSalida Rol;
 }

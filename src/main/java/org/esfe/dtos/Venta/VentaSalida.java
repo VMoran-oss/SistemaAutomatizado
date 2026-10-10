@@ -2,6 +2,7 @@ package org.esfe.dtos.Venta;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.esfe.dtos.Usuario.UsuarioSalida;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -15,4 +16,6 @@ public class VentaSalida implements Serializable {
     private BigDecimal total;
     private String cliente;
     private String usuario;
+
+    private UsuarioSalida Usuario;
 }

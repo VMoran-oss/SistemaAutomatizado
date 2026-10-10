@@ -2,6 +2,7 @@ package org.esfe.dtos.Inventario;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.esfe.dtos.Producto.ProductoSalida;
 
 import java.io.Serializable;
 
@@ -10,4 +11,6 @@ import java.io.Serializable;
 public class InventarioSalida implements Serializable {
     private Integer IdInventario;
     private Integer Cantidad;
+
+    private ProductoSalida Producto;
 }
