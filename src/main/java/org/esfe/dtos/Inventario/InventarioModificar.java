@@ -10,4 +10,6 @@ import java.io.Serializable;
 public class InventarioModificar implements Serializable {
     private Integer IdInventario;
     private Integer Cantidad;
+
+    private Integer idProducto;
 }

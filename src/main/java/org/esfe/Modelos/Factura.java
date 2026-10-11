@@ -33,4 +33,8 @@ public class Factura {
     private String Estado;
 
     private Integer Descuento;
+
+    @OneToOne
+    @JoinColumn(name = "idVenta")
+    private Venta Venta;
 }

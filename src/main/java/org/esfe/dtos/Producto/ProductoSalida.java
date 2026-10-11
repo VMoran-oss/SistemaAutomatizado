@@ -2,6 +2,7 @@ package org.esfe.dtos.Producto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.esfe.dtos.Inventario.InventarioSalida;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

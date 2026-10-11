@@ -2,6 +2,7 @@ package org.esfe.dtos.Factura;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.esfe.dtos.Venta.VentaSalida;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,5 +29,7 @@ public class FacturaSalida implements Serializable {
     private String Estado;
 
     private Integer Descuento;
+
+    private VentaSalida Venta;
 
 }

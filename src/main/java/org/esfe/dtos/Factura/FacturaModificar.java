@@ -29,5 +29,5 @@ public class FacturaModificar implements Serializable {
 
     private Integer Descuento;
 
-    private Integer IdVenta;
+    private Integer idVenta;
 }
