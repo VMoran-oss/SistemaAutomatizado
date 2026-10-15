@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ProductoControlador {
     @Autowired
     private IProductoServicio productoServicio;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<Page<ProductoSalida>> mostrarTodosPaginados(Pageable pageable) {
         Page<ProductoSalida> productos = productoServicio.obtenerTodosPaginados(pageable);
@@ -28,6 +30,7 @@ public class ProductoControlador {
         return ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/lista")
     public ResponseEntity<List<ProductoSalida>> mostrarTodos() {
         List<ProductoSalida> productos = productoServicio.obtenerTodos();
@@ -37,6 +40,7 @@ public class ProductoControlador {
         return ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{IdProducto}")
     public ResponseEntity<ProductoSalida> buscarPorId(@PathVariable Integer IdProducto) {
         ProductoSalida Producto = productoServicio.obtenerPorId(IdProducto);
@@ -46,12 +50,14 @@ public class ProductoControlador {
         return ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ProductoSalida> crear(@RequestBody ProductoGuardar productoGuardar) {
         ProductoSalida Producto = productoServicio.crear(productoGuardar);
         return ResponseEntity.ok(Producto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{IdProducto}")
     public ResponseEntity<ProductoSalida> modificar(@PathVariable Integer IdProducto, @RequestBody ProductoModificar productoModificar) {
         productoModificar.setIdProducto(IdProducto);
@@ -62,6 +68,7 @@ public class ProductoControlador {
         return ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{IdProducto}")
     public ResponseEntity<String> eliminar(@PathVariable Integer IdProducto) {
         productoServicio.eliminarPorId(IdProducto);
