@@ -1,6 +1,5 @@
 package org.esfe.Config;
 
-
 import org.esfe.seguridad.configuracion.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +28,7 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/api/auth/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/api/auth/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
@@ -39,6 +38,3 @@ public class SecurityConfig {
                 .build();
     }
 }
-
-
-

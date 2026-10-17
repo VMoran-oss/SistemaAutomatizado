@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Inventarios)")
+@RequestMapping("/api/Inventarios")
 public class InventarioControlador {
 
     @Autowired
@@ -51,12 +51,13 @@ public class InventarioControlador {
     }
     @PutMapping("/{IdInventario}")
     public ResponseEntity<InventarioSalida> modificar(@PathVariable Integer IdInventario, @RequestBody InventarioModificar inventarioModificar) {
+        inventarioModificar.setIdInventario(IdInventario);
         InventarioSalida Inventario = inventarioServicio.modificar(inventarioModificar);
         return ResponseEntity.ok(Inventario);
     }
     @DeleteMapping("/{IdInventario}")
-        public ResponseEntity eliminar(@PathVariable Integer IdInventario){
+    public ResponseEntity eliminar(@PathVariable Integer IdInventario){
         inventarioServicio.eliminarPorId(IdInventario);
         return ResponseEntity.ok("Registro Eliminado correctamente");
-        }
+    }
 }
