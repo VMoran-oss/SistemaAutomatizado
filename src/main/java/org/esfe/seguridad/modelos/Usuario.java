@@ -12,10 +12,10 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@Entity
+@Entity(name = "SegUsuario")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = "login"))
+@Table(name = "seg_usuarios", uniqueConstraints = @UniqueConstraint(columnNames = "login"))
 public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority((rol.getNombre())));
+        return List.of(new SimpleGrantedAuthority(rol.getNombre()));
     }
 
     @Override

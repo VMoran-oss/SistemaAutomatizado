@@ -24,20 +24,20 @@ public class AplicacionConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService());
+    public AuthenticationProvider authenticationProvider() {
+        // Spring Security 7: el UserDetailsService va en el constructor
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService());
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return username -> usuarioRepository.findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("El usuario no fue encontrado"));
     }
