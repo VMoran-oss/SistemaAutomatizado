@@ -1,0 +1,12 @@
+### Registrar
+POST http://localhost:8080/api/auth/registro
+Content-Type: application/json
+
+{ "nombre": "Ana", "apellido": "Gomez", "telefono": "7000-0000",
+  "login": "admin", "clave": "1234", "rolId": 1 }
+
+### Login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{ "login": "admin", "clave": "1234" }
