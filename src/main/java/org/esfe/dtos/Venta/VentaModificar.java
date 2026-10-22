@@ -1,6 +1,8 @@
 package org.esfe.dtos.Venta;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -9,6 +11,8 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class VentaModificar implements Serializable {
     private Integer idVenta;
     private LocalDate fecha;
