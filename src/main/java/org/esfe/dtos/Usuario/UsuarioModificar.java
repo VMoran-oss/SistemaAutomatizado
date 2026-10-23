@@ -1,12 +1,16 @@
 package org.esfe.dtos.Usuario;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsuarioModificar implements Serializable {
     private Integer idUsuario;
     private String nombre;
