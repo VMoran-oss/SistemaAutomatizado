@@ -30,7 +30,7 @@ class VentaServicioTest {
     @Test
     void t1_crear() {
         VentaSalida ventaSalida = ventaServicio.crear(new VentaGuardar(
-                LocalDate.now(), new BigDecimal("100.50"), "Cliente de prueba", "admin", null));
+                LocalDate.now(), new BigDecimal("111.50"), "Cliente de prueba", "admin", null));
         assertTrue(ventaSalida != null);
         assertNotNull(ventaSalida.getIdVenta());
         idVentaCreada = ventaSalida.getIdVenta();

@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -37,7 +38,8 @@ public class FacturaServicio implements IFacturaServicio {
         List<Factura> facturas = facturaRepositorio.findAll();
 
         return facturas.stream()
-                .map(factura -> modelMapper.map(factura, FacturaSalida.class))
+                .map(factura ->
+                        modelMapper.map(factura, FacturaSalida.class))
                 .collect(Collectors.toList());
     }
 
@@ -46,26 +48,38 @@ public class FacturaServicio implements IFacturaServicio {
         Page<Factura> page = facturaRepositorio.findAll(pageable);
 
         List<FacturaSalida> facturasDto = page.stream()
-                .map(factura -> modelMapper.map(factura, FacturaSalida.class))
+                .map(factura ->
+                        modelMapper.map(factura, FacturaSalida.class))
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(facturasDto, page.getPageable(), page.getTotalElements());
+        return new PageImpl<>(
+                facturasDto,
+                page.getPageable(),
+                page.getTotalElements()
+        );
     }
 
     @Override
     public FacturaSalida obtenerPorId(Integer idFactura) {
         return facturaRepositorio.findById(idFactura)
-                .map(factura -> modelMapper.map(factura, FacturaSalida.class))
+                .map(factura ->
+                        modelMapper.map(factura, FacturaSalida.class))
                 .orElse(null);
     }
 
     @Override
+    @Transactional
     public FacturaSalida crear(FacturaGuardar facturaGuardar) {
-        Venta venta = ventaRepositorio.findById(facturaGuardar.getIdVenta())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "La venta indicada no existe"));
+
+        Venta venta = ventaRepositorio.findById(
+                facturaGuardar.getIdVenta()
+        ).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "La venta indicada no existe"
+        ));
 
         Factura factura = new Factura();
+
         factura.setNumeroFactura(facturaGuardar.getNumeroFactura());
         factura.setFecha(facturaGuardar.getFecha());
         factura.setSubTotal(facturaGuardar.getSubTotal());
@@ -74,22 +88,42 @@ public class FacturaServicio implements IFacturaServicio {
         factura.setMetodoDePago(facturaGuardar.getMetodoDePago());
         factura.setEstado(facturaGuardar.getEstado());
         factura.setDescuento(facturaGuardar.getDescuento());
+
         factura.setVenta(venta);
+        venta.setFactura(factura);
 
         Factura facturaGuardada = facturaRepositorio.save(factura);
 
-        return modelMapper.map(facturaGuardada, FacturaSalida.class);
+        return modelMapper.map(
+                facturaGuardada,
+                FacturaSalida.class
+        );
     }
 
     @Override
+    @Transactional
     public FacturaSalida modificar(FacturaModificar facturaModificar) {
-        Factura factura = facturaRepositorio.findById(facturaModificar.getIdFactura())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Factura no encontrada"));
 
-        Venta venta = ventaRepositorio.findById(facturaModificar.getIdVenta())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "La venta indicada no existe"));
+        Factura factura = facturaRepositorio.findById(
+                facturaModificar.getIdFactura()
+        ).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Factura no encontrada"
+        ));
+
+        Venta venta = ventaRepositorio.findById(
+                facturaModificar.getIdVenta()
+        ).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "La venta indicada no existe"
+        ));
+
+        // Si se cambia la venta, desvincular la anterior.
+        Venta ventaAnterior = factura.getVenta();
+
+        if (ventaAnterior != null && ventaAnterior != venta) {
+            ventaAnterior.setFactura(null);
+        }
 
         factura.setNumeroFactura(facturaModificar.getNumeroFactura());
         factura.setFecha(facturaModificar.getFecha());
@@ -99,15 +133,34 @@ public class FacturaServicio implements IFacturaServicio {
         factura.setMetodoDePago(facturaModificar.getMetodoDePago());
         factura.setEstado(facturaModificar.getEstado());
         factura.setDescuento(facturaModificar.getDescuento());
+
         factura.setVenta(venta);
+        venta.setFactura(factura);
 
         Factura facturaModificada = facturaRepositorio.save(factura);
 
-        return modelMapper.map(facturaModificada, FacturaSalida.class);
+        return modelMapper.map(
+                facturaModificada,
+                FacturaSalida.class
+        );
     }
 
     @Override
+    @Transactional
     public void eliminarPorId(Integer idFactura) {
-        facturaRepositorio.deleteById(idFactura);
+
+        Factura factura = facturaRepositorio.findById(idFactura)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Factura no encontrada"
+                ));
+
+        Venta venta = factura.getVenta();
+
+        if (venta != null) {
+            venta.setFactura(null);
+        }
+
+        facturaRepositorio.delete(factura);
     }
 }

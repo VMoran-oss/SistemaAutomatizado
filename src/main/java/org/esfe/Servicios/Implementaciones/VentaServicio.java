@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -47,48 +48,95 @@ public class VentaServicio implements IVentaServicio {
 
     @Override
     public VentaSalida crear(VentaGuardar ventaGuardar) {
-        validar(ventaGuardar.getTotal(), ventaGuardar.getCliente(), ventaGuardar.getUsuario());
+        validar(
+                ventaGuardar.getTotal(),
+                ventaGuardar.getCliente(),
+                ventaGuardar.getUsuario()
+        );
 
         Venta venta = new Venta();
-        venta.setFecha(ventaGuardar.getFecha()); // si es null, @PrePersist pone la fecha de hoy
+        venta.setFecha(ventaGuardar.getFecha());
         venta.setTotal(ventaGuardar.getTotal());
         venta.setCliente(ventaGuardar.getCliente());
         venta.setUsuario(ventaGuardar.getUsuario());
 
-        return modelMapper.map(ventaRepositorio.save(venta), VentaSalida.class);
+        return modelMapper.map(
+                ventaRepositorio.save(venta),
+                VentaSalida.class
+        );
     }
 
     @Override
     public VentaSalida modificar(VentaModificar ventaModificar) {
-        validar(ventaModificar.getTotal(), ventaModificar.getCliente(), ventaModificar.getUsuario());
+        validar(
+                ventaModificar.getTotal(),
+                ventaModificar.getCliente(),
+                ventaModificar.getUsuario()
+        );
+
         Venta venta = buscarVenta(ventaModificar.getIdVenta());
 
         if (ventaModificar.getFecha() != null) {
             venta.setFecha(ventaModificar.getFecha());
         }
+
         venta.setTotal(ventaModificar.getTotal());
         venta.setCliente(ventaModificar.getCliente());
         venta.setUsuario(ventaModificar.getUsuario());
 
-        return modelMapper.map(ventaRepositorio.save(venta), VentaSalida.class);
+        return modelMapper.map(
+                ventaRepositorio.save(venta),
+                VentaSalida.class
+        );
     }
 
     @Override
+    @Transactional
     public void eliminarPorId(Integer idVenta) {
-        ventaRepositorio.delete(buscarVenta(idVenta));
+        Venta venta = buscarVenta(idVenta);
+
+        // Comprobar si existen detalles asociados.
+        if (ventaRepositorio.tieneDetalles(idVenta)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "No se puede eliminar la venta porque tiene detalles asociados. "
+                            + "Debe gestionar primero sus detalles de venta."
+            );
+        }
+
+        // Si existe una factura asociada, no eliminar la venta.
+        if (venta.getFactura() != null) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "No se puede eliminar la venta porque tiene una factura asociada."
+            );
+        }
+
+        ventaRepositorio.delete(venta);
     }
 
     private Venta buscarVenta(Integer idVenta) {
         return ventaRepositorio.findById(idVenta)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venta no encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Venta no encontrada"
+                ));
     }
 
     private void validar(BigDecimal total, String cliente, String usuario) {
         if (total == null || total.compareTo(BigDecimal.ZERO) < 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El total es obligatorio y no puede ser negativo");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El total es obligatorio y no puede ser negativo"
+            );
         }
-        if (cliente == null || cliente.isBlank() || usuario == null || usuario.isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente y usuario son obligatorios");
+
+        if (cliente == null || cliente.isBlank()
+                || usuario == null || usuario.isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Cliente y usuario son obligatorios"
+            );
         }
     }
 }
