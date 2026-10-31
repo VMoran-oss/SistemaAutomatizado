@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,23 +49,43 @@ public class ClienteServicio implements IClienteServicio {
 
     @Override
     public ClienteSalida obtenerPorId(Integer IdCliente) {
-        return modelMapper.map(clienteRepositorio.findById(IdCliente).get(), ClienteSalida.class);
+        return modelMapper.map(buscarCliente(IdCliente), ClienteSalida.class);
     }
 
     @Override
     public ClienteSalida crear(ClienteGuardar clienteGuardar) {
+        validarNombre(clienteGuardar.getNombre());
+
         Cliente cliente = clienteRepositorio.save(modelMapper.map(clienteGuardar, Cliente.class));
         return modelMapper.map(cliente, ClienteSalida.class);
     }
 
     @Override
     public ClienteSalida modificar(ClienteModificar clienteModificar) {
-        Cliente cliente = clienteRepositorio.save(modelMapper.map(clienteModificar, Cliente.class));
-        return modelMapper.map(cliente, ClienteSalida.class);
+        validarNombre(clienteModificar.getNombre());
+
+
+        Cliente cliente = buscarCliente(clienteModificar.getIdCliente());
+        cliente.setNombre(clienteModificar.getNombre());
+        cliente.setTelefono(clienteModificar.getTelefono());
+        cliente.setCorreo(clienteModificar.getCorreo());
+
+        return modelMapper.map(clienteRepositorio.save(cliente), ClienteSalida.class);
     }
 
     @Override
     public void eliminarPorId(Integer IdCliente) {
-        clienteRepositorio.deleteById(IdCliente);
+        clienteRepositorio.delete(buscarCliente(IdCliente));
+    }
+
+    private Cliente buscarCliente(Integer idCliente) {
+        return clienteRepositorio.findById(idCliente)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado"));
+    }
+
+    private void validarNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del cliente es obligatorio");
+        }
     }
 }

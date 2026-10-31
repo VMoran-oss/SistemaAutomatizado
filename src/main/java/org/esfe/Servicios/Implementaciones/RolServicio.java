@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,23 +49,41 @@ public class RolServicio implements IRolServicio {
 
     @Override
     public RolSalida obtenerPorId(Integer idRol) {
-        return modelMapper.map(rolRepositorio.findById(idRol).get(), RolSalida.class);
+        return modelMapper.map(buscarRol(idRol), RolSalida.class);
     }
 
     @Override
     public RolSalida crear(RolGuardar rolGuardar) {
+        validarNombre(rolGuardar.getNombre());
+
         Rol rol = rolRepositorio.save(modelMapper.map(rolGuardar, Rol.class));
         return modelMapper.map(rol, RolSalida.class);
     }
 
     @Override
     public RolSalida modificar(RolModificar rolModificar) {
-        Rol rol = rolRepositorio.save(modelMapper.map(rolModificar, Rol.class));
-        return modelMapper.map(rol, RolSalida.class);
+        validarNombre(rolModificar.getNombre());
+
+
+        Rol rol = buscarRol(rolModificar.getIdRol());
+        rol.setNombre(rolModificar.getNombre());
+
+        return modelMapper.map(rolRepositorio.save(rol), RolSalida.class);
     }
 
     @Override
     public void eliminarPorId(Integer idRol) {
-        rolRepositorio.deleteById(idRol);
+        rolRepositorio.delete(buscarRol(idRol));
+    }
+
+    private Rol buscarRol(Integer idRol) {
+        return rolRepositorio.findById(idRol)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
+    }
+
+    private void validarNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del rol es obligatorio");
+        }
     }
 }
