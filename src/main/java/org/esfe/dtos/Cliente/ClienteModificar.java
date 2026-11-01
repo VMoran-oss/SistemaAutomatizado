@@ -8,8 +8,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class ClienteModificar implements Serializable {
-    private Integer IdCliente;
-    private String Nombre;
-    private Integer Telefono;
-    private String Correo;
+    private Integer idCliente;
+    private String nombre;
+    private Integer telefono;
+    private String correo;
 }

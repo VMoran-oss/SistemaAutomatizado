@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClienteGuardar implements Serializable {
-    private String Nombre;
-    private Integer Telefono;
-    private String Correo;
+    private String nombre;
+    private Integer telefono;
+    private String correo;
 }
